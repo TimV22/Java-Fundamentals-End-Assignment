@@ -3,6 +3,6 @@ module com.tim.endassignment {
     requires javafx.fxml;
 
 
-    opens com.tim.endassignment to javafx.fxml;
-    exports com.tim.endassignment;
+    opens com.endassignment.ui to javafx.fxml;
+    exports com.endassignment.ui;
 }
