@@ -2,29 +2,22 @@ package com.endassignment.data;
 
 import com.endassignment.model.Item;
 import com.endassignment.model.User;
+import javafx.collections.ObservableList;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
-    private static final File userFile = new File("src/main/resources/com/endassignment/ui/users.bat");
-    private static final File itemFile = new File("src/main/resources/com/endassignment/ui/items.bat");
+    private static final File dataFile = new File("src/main/resources/com/endassignment/ui/data.dat");
     private List<User> users = new ArrayList<>();
     private List<Item> items = new ArrayList<>();
 
-    public static void main(String[] args) {
-        Database db = new Database();
-    }
-
     public Database() {
-        if (!userFile.exists()) {
+        if (!dataFile.exists()) {
             try {
-                userFile.createNewFile();
+                dataFile.createNewFile();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -34,45 +27,57 @@ public class Database {
             users.add(new User("Riordan", "Riordan", "Lane", "Riordan123", LocalDate.of(1979, 10, 21)));
             users.add(new User("Terry", "Terry", "Brasher", "Terry123", LocalDate.of(1982, 7, 31)));
             users.add(new User("Charla", "Charla", "Upton", "Charla123", LocalDate.of(2001, 12, 7)));
-            save(users, userFile);
-        }
-        if (!itemFile.exists()) {
-            try {
-                itemFile.createNewFile();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
             items.add(new Item(1, "Absalom, Absalom!", "William Faulkner", true));
             items.add(new Item(2, "A time to kill", "John Grisham", true));
             items.add(new Item(3, "The house of mirth", "Edith Wharton", true));
-            items.add(new Item(4, "Item 4 description", 4.99, 4));
-            items.add(new Item(5, "Item 5 description", 5.99, 5));
-            items.add(new Item(6, "Item 6 description", 6.99, 6));
-            save(items, itemFile);
-        }
+            items.add(new Item(4, "East of eden", "John SteinBeck", true));
+            items.add(new Item(5, "The sun also rises", "Ernest Hemingway", true));
+            items.add(new Item(6, "Vile bodies", "Evelyn Waugh", true));
 
+            save();
+        } else{
+            load();
+        }
     }
 
 
-    private void save(List list, File file) {
+    private void save() {
         //save list to file
-        try (FileOutputStream fos = new FileOutputStream(file);
+        try (FileOutputStream fos = new FileOutputStream(dataFile);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            for (Object object : list) {
+            for (Object object : users) {
+                oos.writeObject(object);
+            }
+            for (Object object : items) {
                 oos.writeObject(object);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
-    private void load(){
+    private void load() {
         //load list from file
-
-    }
-
-    public boolean fileExists(File file){
-        return file.exists();
+        try (ObjectInputStream ois = new ObjectInputStream(
+                new FileInputStream(dataFile))) {
+            while (true) {
+                try {
+                    Object object = ois.readObject();
+                    if (object instanceof User) {
+                        users.add((User) object);
+                    } else if (object instanceof Item) {
+                        items.add((Item) object);
+                    }
+                } catch (EOFException e) {
+                    break;
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public List<User> getUsers() {

@@ -1,8 +1,9 @@
 package com.endassignment.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class User {
+public class User implements Serializable {
     private String username;
     private String firstName;
     private String lastName;
@@ -56,7 +57,6 @@ public class User {
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
-
 
 
 }
