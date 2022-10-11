@@ -1,6 +1,7 @@
 package com.endassignment.ui;
 
 import com.endassignment.data.Database;
+import com.endassignment.model.Member;
 import com.endassignment.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,9 +19,9 @@ import jfxtras.styles.jmetro.Style;
 
 import java.io.IOException;
 
-public class LoginController {
+public class LoginController extends BaseController {
     private final Database db = new Database();
-    private final ObservableList<User> users = FXCollections.observableList(db.getUsers());
+    private final ObservableList<Member> people = FXCollections.observableList(db.getPeople());
 
     @FXML
     TextField usernameField;
@@ -33,31 +34,29 @@ public class LoginController {
 
     @FXML
     public void onLoginButtonClick(ActionEvent event) throws IOException {
-        for (User user : users) {
-            if (user.getUsername().equals(usernameField.getText()) && user.getPassword().equals(passwordField.getText())) {
-                System.out.println("Login successful");
-                //close login window
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.close();
+        for (Member member : people) {
+            if (member instanceof User) {
+                if (((User) member).getUsername().equals(usernameField.getText()) && ((User) member).getPassword().equals(passwordField.getText())) {
+                    System.out.println("Login successful");
 
-                //open main window
-                FXMLLoader fxmlLoader = new FXMLLoader(StartApplication.class.getResource("main-view.fxml"));
-                fxmlLoader.setController(new MainController());
-                Scene scene = new Scene(fxmlLoader.load());
+                    //get stage and close it
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    stage.close();
 
-                JMetro jMetro = new JMetro(Style.DARK);
-                jMetro.setScene(scene);
+                    nextScene(event, "main-view.fxml", new MainController((User) member, db));
 
-                stage.setTitle("Library system");
-                stage.setScene(scene);
-                stage.show();
+                    //open main window
+                    FXMLLoader fxmlLoader = new FXMLLoader(StartApplication.class.getResource("main-view.fxml"));
 
-                return;
+                    return;
+                }
             }
         }
         System.out.println("Login failed");
         System.out.println("Username: " + usernameField.getText());
         System.out.println("Password: " + passwordField.getText());
+
+        //show error message
         errorLabel.setText("Invalid username or password");
     }
 }
