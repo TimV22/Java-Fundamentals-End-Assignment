@@ -17,7 +17,9 @@ public class Database {
     public Database() {
         if (!dataFile.exists()) {
             loadStandardData();
+            System.out.println("Loaded standard data");
         } else{
+            System.out.println("Loaded data from file");
             load();
         }
     }
@@ -53,7 +55,7 @@ public class Database {
     }
 
 
-    private void save() {
+    public void save() {
         //save list to file
         try (FileOutputStream fos = new FileOutputStream(dataFile);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -63,7 +65,7 @@ public class Database {
             for (Object object : items) {
                 oos.writeObject(object);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

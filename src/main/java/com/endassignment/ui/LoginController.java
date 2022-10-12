@@ -7,15 +7,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import jfxtras.styles.jmetro.JMetro;
-import jfxtras.styles.jmetro.Style;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
@@ -44,10 +41,7 @@ public class LoginController extends BaseController {
                     stage.close();
 
                     nextScene(event, "main-view.fxml", new MainController((User) member, db));
-
-                    //open main window
-                    FXMLLoader fxmlLoader = new FXMLLoader(StartApplication.class.getResource("main-view.fxml"));
-
+                    stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
                     return;
                 }
             }
@@ -59,4 +53,11 @@ public class LoginController extends BaseController {
         //show error message
         errorLabel.setText("Invalid username or password");
     }
+
+    private void closeWindowEvent(WindowEvent windowEvent) {
+        System.out.println("Closing window");
+        db.save();
+    }
+
 }
+

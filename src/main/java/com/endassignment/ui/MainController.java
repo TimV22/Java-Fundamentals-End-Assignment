@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -38,31 +39,30 @@ public class MainController extends BaseController implements Initializable {
     public Label receiveErrorLabel;
 
     @FXML
-    private void onCollectionButtonClick(MouseEvent actionEvent) {
-        nextScene(actionEvent, "collection-view.fxml", new CollectionController(user, db));
+    private void onCollectionButtonClick(MouseEvent mouseEvent) {
+        nextScene(mouseEvent, "table-view.fxml", new CollectionController(user, db));
     }
+
     @FXML
-    private void onMembersButtonClick(MouseEvent actionEvent) {
-        nextScene(actionEvent, "members-view.fxml", new MembersController(user, db));
+    private void onMembersButtonClick(MouseEvent mouseEvent) {
+        nextScene(mouseEvent, "table-view.fxml", new MembersController(user, db));
     }
 
     public void onLendButtonClick(ActionEvent actionEvent) {
         actionEvent.consume();
+
         try {
             lendErrorLabel.setStyle("-fx-text-fill: red");
             if (memberIdentifierField.getText().isEmpty() || lendItemCodeField.getText().isEmpty()) {
                 lendErrorLabel.setText("Please fill in all fields");
                 return;
-            }
-            if (people.stream().noneMatch(member -> member.getIdentifier() == (Integer.parseInt(memberIdentifierField.getText())))) {
+            } else if (people.stream().noneMatch(member -> member.getIdentifier() == (Integer.parseInt(memberIdentifierField.getText())))) {
                 lendErrorLabel.setText("Member not found");
                 return;
-            }
-            if (items.stream().noneMatch(item -> item.getCode() == (Integer.parseInt(lendItemCodeField.getText())))) {
+            } else if (items.stream().noneMatch(item -> item.getCode() == (Integer.parseInt(lendItemCodeField.getText())))) {
                 lendErrorLabel.setText("Item not found");
                 return;
-            }
-            if (!items.stream().filter(item -> item.getCode() == (Integer.parseInt(lendItemCodeField.getText()))).findFirst().get().isAvailable()) {
+            } else if (!items.stream().filter(item -> item.getCode() == (Integer.parseInt(lendItemCodeField.getText()))).findFirst().get().isAvailable()) {
                 lendErrorLabel.setText("Item is already lent");
                 return;
             }
@@ -70,6 +70,7 @@ public class MainController extends BaseController implements Initializable {
             lendErrorLabel.setText("Please enter a number");
             return;
         }
+
         Member member = people.stream().filter(m -> m.getIdentifier() == (Integer.parseInt(memberIdentifierField.getText()))).findFirst().get();
         Item item = items.stream().filter(i -> i.getCode() == (Integer.parseInt(lendItemCodeField.getText()))).findFirst().get();
         item.setAvailable(false);
@@ -85,15 +86,14 @@ public class MainController extends BaseController implements Initializable {
         actionEvent.consume();
         try {
             receiveErrorLabel.setStyle("-fx-text-fill: red");
+
             if (receiveItemCodeField.getText().isEmpty()) {
                 receiveErrorLabel.setText("Please fill in the item code");
                 return;
-            }
-            if (items.stream().noneMatch(item -> item.getCode() == (Integer.parseInt(receiveItemCodeField.getText())))) {
+            } else if (items.stream().noneMatch(item -> item.getCode() == (Integer.parseInt(receiveItemCodeField.getText())))) {
                 receiveErrorLabel.setText("Item not found");
                 return;
-            }
-            if (items.stream().filter(item -> item.getCode() == (Integer.parseInt(receiveItemCodeField.getText()))).findFirst().get().isAvailable()) {
+            } else if (items.stream().filter(item -> item.getCode() == (Integer.parseInt(receiveItemCodeField.getText()))).findFirst().get().isAvailable()) {
                 receiveErrorLabel.setText("Item is not lent");
                 return;
             }
@@ -101,6 +101,7 @@ public class MainController extends BaseController implements Initializable {
             receiveErrorLabel.setText("Please enter a number");
             return;
         }
+
         Item item = items.stream().filter(i -> i.getCode() == (Integer.parseInt(receiveItemCodeField.getText()))).findFirst().get();
         item.setAvailable(true);
         people.stream().filter(member -> member.getBorrowedItems().contains(item)).findFirst().get().getBorrowedItems().remove(item);
