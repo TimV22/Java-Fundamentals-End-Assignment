@@ -21,13 +21,6 @@ public class CollectionController extends BaseController implements Initializabl
     private final ObservableList<Item> items;
     @FXML
     public Button collectionButton;
-
-    public CollectionController(User user, Database db) {
-        this.user = user;
-        this.db = db;
-        items = FXCollections.observableList(db.getItems());
-    }
-
     @FXML
     public Button membersButton;
     @FXML
@@ -37,6 +30,12 @@ public class CollectionController extends BaseController implements Initializabl
     @FXML
     public Label errorLabel;
     private Item selectedItem;
+
+    public CollectionController(User user, Database db) {
+        this.user = user;
+        this.db = db;
+        items = FXCollections.observableList(db.getItems());
+    }
 
     @FXML
     public void onLendingReceivingButtonClick(MouseEvent mouseEvent) {
@@ -74,7 +73,7 @@ public class CollectionController extends BaseController implements Initializabl
         tableView.getColumns().addAll(
                 new TableColumn("Code") {{
                     setCellValueFactory(new PropertyValueFactory<>("code"));
-                    setMinWidth(100);
+                    prefWidthProperty().bind(tableView.widthProperty().multiply(0.13));
                 }},
                 new TableColumn("Available") {{
                     setCellValueFactory(new PropertyValueFactory<>("available"));
@@ -91,15 +90,17 @@ public class CollectionController extends BaseController implements Initializabl
                             }
                         };
                     });
-                    setMinWidth(100);
+                    prefWidthProperty().bind(tableView.widthProperty().multiply(0.15));
                 }},
                 new TableColumn("Title") {{
                     setCellValueFactory(new PropertyValueFactory<>("title"));
-                    setMinWidth(100);
+                    prefWidthProperty().bind(tableView.widthProperty().multiply(0.35));
+
                 }},
                 new TableColumn("Author") {{
                     setCellValueFactory(new PropertyValueFactory<>("author"));
-                    setMinWidth(100);
+                    prefWidthProperty().bind(tableView.widthProperty().multiply(0.35));
+
                 }}
         );
         tableView.setItems(items);

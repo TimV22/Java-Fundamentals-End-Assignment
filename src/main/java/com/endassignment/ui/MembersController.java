@@ -51,7 +51,7 @@ public class MembersController extends BaseController implements Initializable {
         if (selectedMember != null) {
             nextScene(actionEvent, "add-edit-members-view.fxml", new AddEditMembersController(user, db, selectedMember));
         } else {
-            errorLabel.setText("Please select an item to edit");
+            errorLabel.setText("Please select an person to edit");
         }
     }
 
@@ -63,7 +63,7 @@ public class MembersController extends BaseController implements Initializable {
             tableView.setItems(people);
             System.out.println("Person deleted");
         } else {
-            errorLabel.setText("Please select an item to delete");
+            errorLabel.setText("Please select an person to delete");
         }
     }
 
@@ -86,19 +86,23 @@ public class MembersController extends BaseController implements Initializable {
         tableView.getColumns().addAll(
                 new TableColumn("Identifier") {{
                     setCellValueFactory(new PropertyValueFactory<>("identifier"));
-                    setMinWidth(100);
+                    prefWidthProperty().bind(tableView.widthProperty().multiply(0.13));
+
                 }},
                 new TableColumn("First name") {{
                     setCellValueFactory(new PropertyValueFactory<>("firstName"));
-                    setMinWidth(100);
+                    prefWidthProperty().bind(tableView.widthProperty().multiply(0.35));
+
                 }},
                 new TableColumn("Last name") {{
                     setCellValueFactory(new PropertyValueFactory<>("lastName"));
-                    setMinWidth(100);
+                    prefWidthProperty().bind(tableView.widthProperty().multiply(0.35));
+
                 }},
                 new TableColumn("Birth date") {{
                     setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
-                    setMinWidth(100);
+                    prefWidthProperty().bind(tableView.widthProperty().multiply(0.15));
+
                 }}
         );
         tableView.setItems(people);

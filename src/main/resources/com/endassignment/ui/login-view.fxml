@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" spacing="30.0" style="-fx-background-color: #252525;" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1">
-   <padding>
-      <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-   </padding>
-   <children>
-      <Label style="-fx-font-size: 30;" text="Login"/>
-      <TextField fx:id="usernameField" maxHeight="-Infinity" promptText="Username" />
-      <PasswordField fx:id="passwordField" promptText="Password" />
-      <Button contentDisplay="CENTER" defaultButton="true" minWidth="100.0" onAction="#onLoginButtonClick" text="Login" />
-      <Label fx:id="errorLabel" text=" " style="-fx-text-fill: red"/>
-   </children>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity"
+      minHeight="-Infinity"
+      minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" spacing="30.0"
+      style="-fx-background-color: #252525;" xmlns="http://javafx.com/javafx/11.0.14-internal">
+    <padding>
+        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0"/>
+    </padding>
+    <children>
+        <Label style="-fx-font-size: 30;" text="Login"/>
+        <TextField fx:id="usernameField" maxHeight="-Infinity" promptText="Username"/>
+        <PasswordField fx:id="passwordField" promptText="Password"/>
+        <Button contentDisplay="CENTER" defaultButton="true" minWidth="100.0" onAction="#onLoginButtonClick"
+                text="Login"/>
+        <Label fx:id="errorLabel" text=" " style="-fx-text-fill: red"/>
+    </children>
 </VBox>

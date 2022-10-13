@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class BaseController {
 
-    protected void nextScene(Event event, String fxml, BaseController controller){
+    protected void nextScene(Event event, String fxml, BaseController controller) {
         //get stage and close it
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         event.consume();

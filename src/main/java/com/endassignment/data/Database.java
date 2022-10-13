@@ -18,24 +18,24 @@ public class Database {
         if (!dataFile.exists()) {
             loadStandardData();
             System.out.println("Loaded standard data");
-        } else{
+        } else {
             System.out.println("Loaded data from file");
             load();
         }
     }
 
-    private void loadStandardData(){
+    private void loadStandardData() {
         try {
             dataFile.createNewFile();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        people.add(new User(1,"Ilene", "Ilene", "Skinner", "Ilene123", LocalDate.of(1958, 4, 13)));
+        people.add(new User(1, "Ilene", "Ilene", "Skinner", "Ilene123", LocalDate.of(1958, 4, 13)));
         people.add(new User(2, "Terell", "Terell", "Park", "Terell123", LocalDate.of(1959, 10, 16)));
         people.add(new User(3, "Lavonne", "Lavonne", "Henderson", "Lavonne123", LocalDate.of(1960, 5, 3)));
         people.add(new Member(5, "Eustace", "Faulkner", LocalDate.of(1960, 5, 3)));
         people.add(new Member(6, "Malakai", "Haig", LocalDate.of(1971, 1, 27)));
-        people.add(new Member(7,"Odetta", "Sempers", LocalDate.of(1979, 3, 23)));
+        people.add(new Member(7, "Odetta", "Sempers", LocalDate.of(1979, 3, 23)));
         people.add(new User(8, "Riordan", "Riordan", "Lane", "Riordan123", LocalDate.of(1979, 10, 21)));
         people.add(new User(9, "Terry", "Terry", "Brasher", "Terry123", LocalDate.of(1982, 7, 31)));
         people.add(new User(10, "Charla", "Charla", "Upton", "Charla123", LocalDate.of(2001, 12, 7)));
@@ -56,6 +56,7 @@ public class Database {
 
 
     public void save() {
+        System.out.println("Saving data to file");
         //save list to file
         try (FileOutputStream fos = new FileOutputStream(dataFile);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -77,8 +78,8 @@ public class Database {
             while (true) {
                 try {
                     Object object = ois.readObject();
-                    if (object instanceof User) {
-                        people.add((User) object);
+                    if (object instanceof Member) {
+                        people.add((Member) object);
                     } else if (object instanceof Item) {
                         items.add((Item) object);
                     }

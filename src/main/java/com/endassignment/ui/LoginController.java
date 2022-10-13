@@ -41,7 +41,26 @@ public class LoginController extends BaseController {
                     stage.close();
 
                     nextScene(event, "main-view.fxml", new MainController((User) member, db));
+                    stage.setResizable(true);
+
+                    //adding event to save the database when program is closed
                     stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
+
+                    //making sure the window does not get to small
+                    stage.widthProperty().addListener((o, oldValue, newValue) -> {
+                        if (newValue.intValue() < 800.0) {
+                            stage.setResizable(false);
+                            stage.setWidth(800);
+                            stage.setResizable(true);
+                        }
+                    });
+                    stage.heightProperty().addListener((o, oldValue, newValue) -> {
+                        if (newValue.intValue() < 400.0) {
+                            stage.setResizable(false);
+                            stage.setHeight(400);
+                            stage.setResizable(true);
+                        }
+                    });
                     return;
                 }
             }

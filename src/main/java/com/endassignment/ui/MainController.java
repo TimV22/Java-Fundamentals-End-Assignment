@@ -22,21 +22,19 @@ public class MainController extends BaseController implements Initializable {
     private final Database db;
     private final ObservableList<Member> people;
     private final ObservableList<Item> items;
+    public TextField memberIdentifierField;
+    public TextField lendItemCodeField;
+    public TextField receiveItemCodeField;
+    public Label welcomeLabel;
+    public Label lendErrorLabel;
+    public Label receiveErrorLabel;
+
     public MainController(User user, Database db) {
         this.user = user;
         this.db = db;
         people = FXCollections.observableList(db.getPeople());
         items = FXCollections.observableList(db.getItems());
     }
-
-
-    public TextField memberIdentifierField;
-    public TextField lendItemCodeField;
-
-    public TextField receiveItemCodeField;
-    public Label welcomeLabel;
-    public Label lendErrorLabel;
-    public Label receiveErrorLabel;
 
     @FXML
     private void onCollectionButtonClick(MouseEvent mouseEvent) {

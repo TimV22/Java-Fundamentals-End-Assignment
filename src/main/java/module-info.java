@@ -4,7 +4,6 @@ module com.tim.endassignment {
     requires javafx.fxml;
 
 
-
     opens com.endassignment.ui to javafx.fxml;
     opens com.endassignment.model to javafx.base;
     exports com.endassignment.ui;
