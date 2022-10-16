@@ -81,6 +81,7 @@ public class MembersController extends BaseController implements Initializable {
     public void onCollectionButtonClick(MouseEvent mouseEvent) {
         nextScene(mouseEvent, "table-view.fxml", new CollectionController(user, db));
     }
+    //TODO A search functionality that works on parts of both title and author is not mandatory for a passing grade, but will give points
 
     private void initTableView() {
         tableView.getColumns().addAll(

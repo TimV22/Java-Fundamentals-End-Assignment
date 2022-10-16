@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+@SuppressWarnings("rawtypes")
 public class CollectionController extends BaseController implements Initializable {
     private final User user;
     private final Database db;
@@ -77,19 +78,18 @@ public class CollectionController extends BaseController implements Initializabl
                 }},
                 new TableColumn("Available") {{
                     setCellValueFactory(new PropertyValueFactory<>("available"));
-                    setCellFactory(column -> {
-                        return new TableCell<Item, Boolean>() {
-                            @Override
-                            protected void updateItem(Boolean item, boolean empty) {
-                                super.updateItem(item, empty);
-                                if (item == null || empty) {
-                                    setText(null);
-                                } else {
-                                    setText(item ? "Yes" : "No");
+                    setCellFactory(column ->
+                            new TableCell<Item, Boolean>() {
+                                @Override
+                                protected void updateItem(Boolean item, boolean empty) {
+                                    super.updateItem(item, empty);
+                                    if (item == null || empty) {
+                                        setText(null);
+                                    } else {
+                                        setText(Boolean.TRUE.equals(item) ? "Yes" : "No");
+                                    }
                                 }
-                            }
-                        };
-                    });
+                            });
                     prefWidthProperty().bind(tableView.widthProperty().multiply(0.15));
                 }},
                 new TableColumn("Title") {{

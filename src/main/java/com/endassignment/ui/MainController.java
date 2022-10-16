@@ -22,11 +22,17 @@ public class MainController extends BaseController implements Initializable {
     private final Database db;
     private final ObservableList<Member> people;
     private final ObservableList<Item> items;
+    @FXML
     public TextField memberIdentifierField;
+    @FXML
     public TextField lendItemCodeField;
+    @FXML
     public TextField receiveItemCodeField;
+    @FXML
     public Label welcomeLabel;
+    @FXML
     public Label lendErrorLabel;
+    @FXML
     public Label receiveErrorLabel;
 
     public MainController(User user, Database db) {
@@ -36,6 +42,7 @@ public class MainController extends BaseController implements Initializable {
         items = FXCollections.observableList(db.getItems());
     }
 
+    //TODO Lending date
     @FXML
     private void onCollectionButtonClick(MouseEvent mouseEvent) {
         nextScene(mouseEvent, "table-view.fxml", new CollectionController(user, db));
@@ -46,6 +53,7 @@ public class MainController extends BaseController implements Initializable {
         nextScene(mouseEvent, "table-view.fxml", new MembersController(user, db));
     }
 
+    @FXML
     public void onLendButtonClick(ActionEvent actionEvent) {
         actionEvent.consume();
 
@@ -80,6 +88,7 @@ public class MainController extends BaseController implements Initializable {
         clearFields();
     }
 
+    @FXML
     public void onReceiveButtonClick(ActionEvent actionEvent) {
         actionEvent.consume();
         try {

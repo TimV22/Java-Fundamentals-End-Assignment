@@ -5,31 +5,32 @@ import com.endassignment.model.Member;
 import com.endassignment.model.User;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
-    private static final File dataFile = new File("src/main/resources/com/endassignment/ui/data.dat");
+    private static final File DATA_FILE = new File("src/main/resources/com/endassignment/ui/data.dat");
     private final List<Member> people = new ArrayList<>();
     private final List<Item> items = new ArrayList<>();
 
     public Database() {
-        if (!dataFile.exists()) {
+        if (!DATA_FILE.exists()) {
             loadStandardData();
             System.out.println("Loaded standard data");
         } else {
-            System.out.println("Loaded data from file");
             load();
         }
     }
 
     private void loadStandardData() {
         try {
-            dataFile.createNewFile();
+            Files.createFile(DATA_FILE.toPath());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("Created new data file");
         people.add(new User(1, "Ilene", "Ilene", "Skinner", "Ilene123", LocalDate.of(1958, 4, 13)));
         people.add(new User(2, "Terell", "Terell", "Park", "Terell123", LocalDate.of(1959, 10, 16)));
         people.add(new User(3, "Lavonne", "Lavonne", "Henderson", "Lavonne123", LocalDate.of(1960, 5, 3)));
@@ -58,7 +59,7 @@ public class Database {
     public void save() {
         System.out.println("Saving data to file");
         //save list to file
-        try (FileOutputStream fos = new FileOutputStream(dataFile);
+        try (FileOutputStream fos = new FileOutputStream(DATA_FILE);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             for (Object object : people) {
                 oos.writeObject(object);
@@ -74,14 +75,14 @@ public class Database {
     private void load() {
         //load list from file
         try (ObjectInputStream ois = new ObjectInputStream(
-                new FileInputStream(dataFile))) {
+                new FileInputStream(DATA_FILE))) {
             while (true) {
                 try {
                     Object object = ois.readObject();
-                    if (object instanceof Member) {
-                        people.add((Member) object);
-                    } else if (object instanceof Item) {
-                        items.add((Item) object);
+                    if (object instanceof Member member) {
+                        people.add(member);
+                    } else if (object instanceof Item item) {
+                        items.add(item);
                     }
                 } catch (EOFException e) {
                     break;
@@ -89,8 +90,13 @@ public class Database {
                     throw new RuntimeException(e);
                 }
             }
+            System.out.println("Loaded data from file");
         } catch (IOException e) {
-            dataFile.delete();
+            try {
+                Files.delete(DATA_FILE.toPath());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             loadStandardData();
         }
     }

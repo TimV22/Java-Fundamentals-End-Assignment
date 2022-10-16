@@ -10,7 +10,7 @@ public class Member implements Serializable {
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private List<Item> borrowedItems;
+    private final List<Item> borrowedItems;
 
     public Member(int identifier, String firstName, String lastName, LocalDate dateOfBirth) {
         this.identifier = identifier;

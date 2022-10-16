@@ -22,7 +22,6 @@ public class StartApplication extends Application {
 
         JMetro jMetro = new JMetro(Style.DARK);
         jMetro.setScene(scene);
-        //jMetro.setParent(fxmlLoader.getRoot());
 
         stage.setResizable(false);
         stage.setTitle("Login");
