@@ -19,8 +19,6 @@ import java.util.ResourceBundle;
 
 public class AddEditMembersController extends BaseController implements Initializable {
 
-    private final User user;
-    private final Database db;
     private final ObservableList<Member> people;
     @FXML
     public TextField firstNameField;
@@ -35,33 +33,13 @@ public class AddEditMembersController extends BaseController implements Initiali
     private Member selectedMember = null;
 
     public AddEditMembersController(User user, Database db) {
-        super();
-        this.user = user;
-        this.db = db;
+        super(user, db);
         people = FXCollections.observableList(db.getPeople());
     }
 
     public AddEditMembersController(User user, Database db, Member selectedMember) {
         this(user, db);
         this.selectedMember = selectedMember;
-    }
-
-    @FXML
-    public void onLendingReceivingButtonClick(MouseEvent mouseEvent) {
-        //to main view
-        nextScene(mouseEvent, "main-view.fxml", new MainController(user, db));
-    }
-
-    @FXML
-    public void onCollectionButtonClick(MouseEvent mouseEvent) {
-        //to collection view
-        nextScene(mouseEvent, "table-view.fxml", new CollectionController(user, db));
-    }
-
-    @FXML
-    public void onMembersButtonClick(MouseEvent mouseEvent) {
-        //to members view
-        nextScene(mouseEvent, "table-view.fxml", new MembersController(user, db));
     }
 
     @FXML

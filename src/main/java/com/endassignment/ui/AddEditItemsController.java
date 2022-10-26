@@ -18,8 +18,7 @@ import java.util.Comparator;
 import java.util.ResourceBundle;
 
 public class AddEditItemsController extends BaseController implements Initializable {
-    private final User user;
-    private final Database db;
+
     private final ObservableList<Item> items;
     @FXML
     public TextField titleField;
@@ -32,9 +31,7 @@ public class AddEditItemsController extends BaseController implements Initializa
     private Item selectedItem = null;
 
     public AddEditItemsController(User user, Database db) {
-        super();
-        this.user = user;
-        this.db = db;
+        super(user, db);
         items = FXCollections.observableList(db.getItems());
     }
 
@@ -43,23 +40,7 @@ public class AddEditItemsController extends BaseController implements Initializa
         this.selectedItem = selectedItem;
     }
 
-    @FXML
-    public void onLendingReceivingButtonClick(MouseEvent mouseEvent) {
-        //to main view
-        nextScene(mouseEvent, "main-view.fxml", new MainController(user, db));
-    }
 
-    @FXML
-    public void onCollectionButtonClick(MouseEvent mouseEvent) {
-        //to collection view
-        nextScene(mouseEvent, "table-view.fxml", new CollectionController(user, db));
-    }
-
-    @FXML
-    public void onMembersButtonClick(MouseEvent mouseEvent) {
-        //to members view
-        nextScene(mouseEvent, "add-edit-members.fxml", new AddEditMembersController(user, db));
-    }
 
     @FXML
     public void onAddEditItemButtonClick(ActionEvent actionEvent) {

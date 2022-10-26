@@ -17,8 +17,6 @@ import java.util.ResourceBundle;
 
 @SuppressWarnings("rawtypes")
 public class CollectionController extends BaseController implements Initializable {
-    private final User user;
-    private final Database db;
     private final ObservableList<Item> items;
     @FXML
     public Button collectionButton;
@@ -33,24 +31,8 @@ public class CollectionController extends BaseController implements Initializabl
     private Item selectedItem;
 
     public CollectionController(User user, Database db) {
-        this.user = user;
-        this.db = db;
+        super(user, db);
         items = FXCollections.observableList(db.getItems());
-    }
-
-    @FXML
-    public void onLendingReceivingButtonClick(MouseEvent mouseEvent) {
-        nextScene(mouseEvent, "main-view.fxml", new MainController(user, db));
-    }
-
-    @FXML
-    public void onCollectionButtonClick(MouseEvent mouseEvent) {
-        mouseEvent.consume();
-    }
-
-    @FXML
-    public void onMembersButtonClick(MouseEvent mouseEvent) {
-        nextScene(mouseEvent, "table-view.fxml", new MembersController(user, db));
     }
 
     @Override

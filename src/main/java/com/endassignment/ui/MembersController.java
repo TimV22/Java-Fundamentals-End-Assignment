@@ -20,8 +20,6 @@ import java.util.ResourceBundle;
 
 public class MembersController extends BaseController implements Initializable {
 
-    private final User user;
-    private final Database db;
     private final ObservableList<Member> people;
     @FXML
     public Label specifyScreenLabel;
@@ -36,8 +34,7 @@ public class MembersController extends BaseController implements Initializable {
     private Member selectedMember;
 
     public MembersController(User user, Database db) {
-        this.user = user;
-        this.db = db;
+        super(user, db);
         people = FXCollections.observableList(db.getPeople());
     }
 
@@ -65,21 +62,6 @@ public class MembersController extends BaseController implements Initializable {
         } else {
             errorLabel.setText("Please select an person to delete");
         }
-    }
-
-    @FXML
-    public void onLendingReceivingButtonClick(MouseEvent mouseEvent) {
-        nextScene(mouseEvent, "main-view.fxml", new MainController(user, db));
-    }
-
-    @FXML
-    public void onMembersButtonClick(MouseEvent mouseEvent) {
-        mouseEvent.consume();
-    }
-
-    @FXML
-    public void onCollectionButtonClick(MouseEvent mouseEvent) {
-        nextScene(mouseEvent, "table-view.fxml", new CollectionController(user, db));
     }
     //TODO A search functionality that works on parts of both title and author is not mandatory for a passing grade, but will give points
 

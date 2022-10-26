@@ -18,8 +18,6 @@ import java.util.ResourceBundle;
 
 public class MainController extends BaseController implements Initializable {
 
-    private final User user;
-    private final Database db;
     private final ObservableList<Member> people;
     private final ObservableList<Item> items;
     @FXML
@@ -36,23 +34,12 @@ public class MainController extends BaseController implements Initializable {
     public Label receiveErrorLabel;
 
     public MainController(User user, Database db) {
-        this.user = user;
-        this.db = db;
+        super(user, db);
         people = FXCollections.observableList(db.getPeople());
         items = FXCollections.observableList(db.getItems());
     }
 
     //TODO Lending date
-    @FXML
-    private void onCollectionButtonClick(MouseEvent mouseEvent) {
-        nextScene(mouseEvent, "table-view.fxml", new CollectionController(user, db));
-    }
-
-    @FXML
-    private void onMembersButtonClick(MouseEvent mouseEvent) {
-        nextScene(mouseEvent, "table-view.fxml", new MembersController(user, db));
-    }
-
     @FXML
     public void onLendButtonClick(ActionEvent actionEvent) {
         actionEvent.consume();
