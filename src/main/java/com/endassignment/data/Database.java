@@ -1,58 +1,73 @@
 package com.endassignment.data;
 
 import com.endassignment.model.Item;
+import com.endassignment.model.Member;
 import com.endassignment.model.User;
-import javafx.collections.ObservableList;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
-    private static final File dataFile = new File("src/main/resources/com/endassignment/ui/data.dat");
-    private List<User> users = new ArrayList<>();
-    private List<Item> items = new ArrayList<>();
+    private static final File DATA_FILE = new File("src/main/resources/com/endassignment/ui/data.dat");
+    private final List<Member> people = new ArrayList<>();
+    private final List<Item> items = new ArrayList<>();
 
     public Database() {
-        if (!dataFile.exists()) {
-            try {
-                dataFile.createNewFile();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            users.add(new User("Ilene", "Ilene", "Skinner", "Ilene123", LocalDate.of(1958, 4, 13)));
-            users.add(new User("Terrell", "Terrell", "Park", "Terrell123", LocalDate.of(1959, 10, 16)));
-            users.add(new User("Lavonne", "Lavonne", "Henderson", "Lavonne123", LocalDate.of(1960, 5, 3)));
-            users.add(new User("Riordan", "Riordan", "Lane", "Riordan123", LocalDate.of(1979, 10, 21)));
-            users.add(new User("Terry", "Terry", "Brasher", "Terry123", LocalDate.of(1982, 7, 31)));
-            users.add(new User("Charla", "Charla", "Upton", "Charla123", LocalDate.of(2001, 12, 7)));
-
-            items.add(new Item(1, "Absalom, Absalom!", "William Faulkner", true));
-            items.add(new Item(2, "A time to kill", "John Grisham", true));
-            items.add(new Item(3, "The house of mirth", "Edith Wharton", true));
-            items.add(new Item(4, "East of eden", "John SteinBeck", true));
-            items.add(new Item(5, "The sun also rises", "Ernest Hemingway", true));
-            items.add(new Item(6, "Vile bodies", "Evelyn Waugh", true));
-
-            save();
-        } else{
+        if (!DATA_FILE.exists()) {
+            loadStandardData();
+            System.out.println("Loaded standard data");
+        } else {
             load();
         }
     }
 
+    private void loadStandardData() {
+        try {
+            Files.createFile(DATA_FILE.toPath());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Created new data file");
+        people.add(new User(1, "Ilene", "Ilene", "Skinner", "Ilene123", LocalDate.of(1958, 4, 13)));
+        people.add(new User(2, "Terell", "Terell", "Park", "Terell123", LocalDate.of(1959, 10, 16)));
+        people.add(new User(3, "Lavonne", "Lavonne", "Henderson", "Lavonne123", LocalDate.of(1960, 5, 3)));
+        people.add(new Member(5, "Eustace", "Faulkner", LocalDate.of(1960, 5, 3)));
+        people.add(new Member(6, "Malakai", "Haig", LocalDate.of(1971, 1, 27)));
+        people.add(new Member(7, "Odetta", "Sempers", LocalDate.of(1979, 3, 23)));
+        people.add(new User(8, "Riordan", "Riordan", "Lane", "Riordan123", LocalDate.of(1979, 10, 21)));
+        people.add(new User(9, "Terry", "Terry", "Brasher", "Terry123", LocalDate.of(1982, 7, 31)));
+        people.add(new User(10, "Charla", "Charla", "Upton", "Charla123", LocalDate.of(2001, 12, 7)));
+        people.add(new Member(11, "Lorrie", "Barnes", LocalDate.of(1982, 7, 31)));
+        people.add(new Member(12, "Lulu", "Law", LocalDate.of(1966, 3, 20)));
+        people.add(new Member(13, "Ellie", "Leonard", LocalDate.of(1999, 3, 13)));
 
-    private void save() {
+
+        items.add(new Item(1, "Absalom, Absalom!", "William Faulkner", true));
+        items.add(new Item(2, "A time to kill", "John Grisham", true));
+        items.add(new Item(3, "The house of mirth", "Edith Wharton", true));
+        items.add(new Item(4, "East of eden", "John SteinBeck", true));
+        items.add(new Item(5, "The sun also rises", "Ernest Hemingway", true));
+        items.add(new Item(6, "Vile bodies", "Evelyn Waugh", true));
+
+        save();
+    }
+
+
+    public void save() {
+        System.out.println("Saving data to file");
         //save list to file
-        try (FileOutputStream fos = new FileOutputStream(dataFile);
+        try (FileOutputStream fos = new FileOutputStream(DATA_FILE);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            for (Object object : users) {
+            for (Object object : people) {
                 oos.writeObject(object);
             }
             for (Object object : items) {
                 oos.writeObject(object);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -60,14 +75,14 @@ public class Database {
     private void load() {
         //load list from file
         try (ObjectInputStream ois = new ObjectInputStream(
-                new FileInputStream(dataFile))) {
+                new FileInputStream(DATA_FILE))) {
             while (true) {
                 try {
                     Object object = ois.readObject();
-                    if (object instanceof User) {
-                        users.add((User) object);
-                    } else if (object instanceof Item) {
-                        items.add((Item) object);
+                    if (object instanceof Member member) {
+                        people.add(member);
+                    } else if (object instanceof Item item) {
+                        items.add(item);
                     }
                 } catch (EOFException e) {
                     break;
@@ -75,13 +90,19 @@ public class Database {
                     throw new RuntimeException(e);
                 }
             }
+            System.out.println("Loaded data from file");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            try {
+                Files.delete(DATA_FILE.toPath());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            loadStandardData();
         }
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<Member> getPeople() {
+        return people;
     }
 
     public List<Item> getItems() {

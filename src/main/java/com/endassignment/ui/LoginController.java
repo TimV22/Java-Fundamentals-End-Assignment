@@ -1,26 +1,22 @@
 package com.endassignment.ui;
 
 import com.endassignment.data.Database;
+import com.endassignment.model.Member;
 import com.endassignment.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import jfxtras.styles.jmetro.JMetro;
-import jfxtras.styles.jmetro.Style;
+import javafx.stage.WindowEvent;
 
-import java.io.IOException;
-
-public class LoginController {
+public class LoginController extends BaseController {
     private final Database db = new Database();
-    private final ObservableList<User> users = FXCollections.observableList(db.getUsers());
+    private final ObservableList<Member> people = FXCollections.observableList(db.getPeople());
 
     @FXML
     TextField usernameField;
@@ -32,32 +28,51 @@ public class LoginController {
     Label errorLabel;
 
     @FXML
-    public void onLoginButtonClick(ActionEvent event) throws IOException {
-        for (User user : users) {
-            if (user.getUsername().equals(usernameField.getText()) && user.getPassword().equals(passwordField.getText())) {
+    public void onLoginButtonClick(ActionEvent event) {
+        for (Member member : people) {
+            if (member instanceof User user && user.getUsername().equals(usernameField.getText()) && user.getPassword().equals(passwordField.getText())) {
                 System.out.println("Login successful");
-                //close login window
+
+                //get stage and close it
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.close();
 
-                //open main window
-                FXMLLoader fxmlLoader = new FXMLLoader(StartApplication.class.getResource("main-view.fxml"));
-                fxmlLoader.setController(new MainController());
-                Scene scene = new Scene(fxmlLoader.load());
+                nextScene(event, "main-view.fxml", new MainController((User) member, db));
+                stage.setResizable(true);
 
-                JMetro jMetro = new JMetro(Style.DARK);
-                jMetro.setScene(scene);
+                //adding event to save the database when program is closed
+                stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
 
-                stage.setTitle("Library system");
-                stage.setScene(scene);
-                stage.show();
-
+                //making sure the window does not get to small
+                stage.widthProperty().addListener((o, oldValue, newValue) -> {
+                    if (newValue.intValue() < 800.0) {
+                        stage.setResizable(false);
+                        stage.setWidth(800);
+                        stage.setResizable(true);
+                    }
+                });
+                stage.heightProperty().addListener((o, oldValue, newValue) -> {
+                    if (newValue.intValue() < 400.0) {
+                        stage.setResizable(false);
+                        stage.setHeight(400);
+                        stage.setResizable(true);
+                    }
+                });
                 return;
             }
         }
         System.out.println("Login failed");
         System.out.println("Username: " + usernameField.getText());
         System.out.println("Password: " + passwordField.getText());
+
+        //show error message
         errorLabel.setText("Invalid username or password");
     }
+
+    private void closeWindowEvent(WindowEvent windowEvent) {
+        System.out.println("Closing window");
+        db.save();
+    }
+
 }
+
