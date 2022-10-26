@@ -22,7 +22,7 @@ public class Database {
                 e.printStackTrace();
             }
             users.add(new User("Ilene", "Ilene", "Skinner", "Ilene123", LocalDate.of(1958, 4, 13)));
-            users.add(new User("Terell", "Terell", "Park", "Terell123", LocalDate.of(1959, 10, 16)));
+            users.add(new User("Terrell", "Terrell", "Park", "Terrell123", LocalDate.of(1959, 10, 16)));
             users.add(new User("Lavonne", "Lavonne", "Henderson", "Lavonne123", LocalDate.of(1960, 5, 3)));
             users.add(new User("Riordan", "Riordan", "Lane", "Riordan123", LocalDate.of(1979, 10, 21)));
             users.add(new User("Terry", "Terry", "Brasher", "Terry123", LocalDate.of(1982, 7, 31)));
