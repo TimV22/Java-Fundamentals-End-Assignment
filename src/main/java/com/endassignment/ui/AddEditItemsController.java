@@ -11,7 +11,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.util.Comparator;
@@ -20,6 +19,7 @@ import java.util.ResourceBundle;
 public class AddEditItemsController extends BaseController implements Initializable {
 
     private final ObservableList<Item> items;
+    private final MainController mainController;
     @FXML
     public TextField titleField;
     @FXML
@@ -30,16 +30,16 @@ public class AddEditItemsController extends BaseController implements Initializa
     public Label itemLabel;
     private Item selectedItem = null;
 
-    public AddEditItemsController(User user, Database db) {
+    public AddEditItemsController(User user, Database db, MainController mainController) {
         super(user, db);
         items = FXCollections.observableList(db.getItems());
+        this.mainController = mainController;
     }
 
-    public AddEditItemsController(User user, Database db, Item selectedItem) {
-        this(user, db);
+    public AddEditItemsController(User user, Database db, Item selectedItem, MainController mainController) {
+        this(user, db, mainController);
         this.selectedItem = selectedItem;
     }
-
 
 
     @FXML
@@ -59,13 +59,13 @@ public class AddEditItemsController extends BaseController implements Initializa
             selectedItem.setAuthor(authorField.getText());
         }
         //back to collection
-        nextScene(actionEvent, "table-view.fxml", new CollectionController(user, db));
+        mainController.loadNextScene("collection-table-view.fxml", new CollectionController(user, db, mainController));
     }
 
     @FXML
     public void onCancelButtonClick(ActionEvent actionEvent) {
         //back to collection
-        nextScene(actionEvent, "table-view.fxml", new CollectionController(user, db));
+        mainController.loadNextScene("collection-table-view.fxml", new CollectionController(user, db, mainController));
     }
 
     @Override

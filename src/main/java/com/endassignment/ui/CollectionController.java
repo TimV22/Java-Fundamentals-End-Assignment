@@ -9,102 +9,85 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-@SuppressWarnings("rawtypes")
+
 public class CollectionController extends BaseController implements Initializable {
     private final ObservableList<Item> items;
+    private final MainController mainController;
     @FXML
     public Button collectionButton;
     @FXML
     public Button membersButton;
     @FXML
-    public Label specifyScreenLabel;
+    public TableColumn<Item, Boolean> availableTableColumn;
     @FXML
-    public TableView tableView;
+    public TableView<Item> collectionTableView;
     @FXML
     public Label errorLabel;
     private Item selectedItem;
 
-    public CollectionController(User user, Database db) {
+    public CollectionController(User user, Database db, MainController mainController) {
         super(user, db);
         items = FXCollections.observableList(db.getItems());
+        this.mainController = mainController;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        specifyScreenLabel.setText("Collection");
         initTableView();
 
-        //show collection as selected tab
-        collectionButton.setStyle("-fx-background-color: #252525; -fx-min-width: 150; -fx-background-radius: 3 3 0 0;");
-
         //get selected item
-        tableView.getSelectionModel().selectedIndexProperty().addListener((observable -> {
-            if (tableView.getSelectionModel().getSelectedItem() != null) {
-                selectedItem = (Item) tableView.getSelectionModel().getSelectedItem();
+        collectionTableView.getSelectionModel().selectedIndexProperty().addListener((observable -> {
+            if (collectionTableView.getSelectionModel().getSelectedItem() != null) {
+                selectedItem = collectionTableView.getSelectionModel().getSelectedItem();
                 System.out.println("Selected item: " + selectedItem);
             }
         }));
     }
 
     private void initTableView() {
-        tableView.getColumns().addAll(
-                new TableColumn("Code") {{
-                    setCellValueFactory(new PropertyValueFactory<>("code"));
-                    prefWidthProperty().bind(tableView.widthProperty().multiply(0.13));
-                }},
-                new TableColumn("Available") {{
-                    setCellValueFactory(new PropertyValueFactory<>("available"));
-                    setCellFactory(column ->
-                            new TableCell<Item, Boolean>() {
-                                @Override
-                                protected void updateItem(Boolean item, boolean empty) {
-                                    super.updateItem(item, empty);
-                                    if (item == null || empty) {
-                                        setText(null);
-                                    } else {
-                                        setText(Boolean.TRUE.equals(item) ? "Yes" : "No");
-                                    }
-                                }
-                            });
-                    prefWidthProperty().bind(tableView.widthProperty().multiply(0.15));
-                }},
-                new TableColumn("Title") {{
-                    setCellValueFactory(new PropertyValueFactory<>("title"));
-                    prefWidthProperty().bind(tableView.widthProperty().multiply(0.35));
+        if (availableTableColumn != null) {
 
-                }},
-                new TableColumn("Author") {{
-                    setCellValueFactory(new PropertyValueFactory<>("author"));
-                    prefWidthProperty().bind(tableView.widthProperty().multiply(0.35));
+            availableTableColumn.setCellFactory(column -> new TableCell<Item, Boolean>() {
+                @Override
+                protected void updateItem(Boolean item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        setText(Boolean.TRUE.equals(item) ? "Yes" : "No");
+                    }
+                }
+            });
+        }
 
-                }}
-        );
-        tableView.setItems(items);
+        collectionTableView.setItems(items);
     }
 
+    @FXML
     public void onAddButtonClick(ActionEvent actionEvent) {
-        nextScene(actionEvent, "add-edit-items-view.fxml", new AddEditItemsController(user, db));
+        mainController.loadNextScene("add-edit-items-view.fxml", new AddEditItemsController(user, db, mainController));
     }
 
+    @FXML
     public void onEditButtonClick(ActionEvent actionEvent) {
         if (selectedItem != null) {
-            nextScene(actionEvent, "add-edit-items-view.fxml", new AddEditItemsController(user, db, selectedItem));
+            mainController.loadNextScene("add-edit-items-view.fxml", new AddEditItemsController(user, db, selectedItem, mainController));
         } else {
             errorLabel.setText("Please select an item to edit");
         }
     }
 
+    @FXML
     public void onDeleteButtonClick(ActionEvent actionEvent) {
         actionEvent.consume();
         if (selectedItem != null) {
             items.remove(selectedItem);
-            tableView.setItems(items);
+            collectionTableView.setItems(items);
             System.out.println("Item deleted");
         } else {
             errorLabel.setText("Please select an item to delete");

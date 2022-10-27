@@ -12,7 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -20,6 +19,7 @@ import java.util.ResourceBundle;
 public class AddEditMembersController extends BaseController implements Initializable {
 
     private final ObservableList<Member> people;
+    private final MainController mainController;
     @FXML
     public TextField firstNameField;
     @FXML
@@ -32,13 +32,14 @@ public class AddEditMembersController extends BaseController implements Initiali
     public Label memberLabel;
     private Member selectedMember = null;
 
-    public AddEditMembersController(User user, Database db) {
+    public AddEditMembersController(User user, Database db, MainController mainController) {
         super(user, db);
         people = FXCollections.observableList(db.getPeople());
+        this.mainController = mainController;
     }
 
-    public AddEditMembersController(User user, Database db, Member selectedMember) {
-        this(user, db);
+    public AddEditMembersController(User user, Database db, Member selectedMember, MainController mainController) {
+        this(user, db, mainController);
         this.selectedMember = selectedMember;
     }
 
@@ -61,13 +62,13 @@ public class AddEditMembersController extends BaseController implements Initiali
             selectedMember.setDateOfBirth(birthDatePicker.getValue());
         }
         //back to Members view
-        nextScene(actionEvent, "table-view.fxml", new MembersController(user, db));
+        mainController.loadNextScene("member-table-view.fxml", new MembersController(user, db, mainController));
     }
 
     @FXML
     public void onCancelButtonClick(ActionEvent actionEvent) {
         //back to Members view
-        nextScene(actionEvent, "table-view.fxml", new MembersController(user, db));
+        mainController.loadNextScene("member-table-view.fxml", new MembersController(user, db, mainController));
     }
 
     private boolean checkIfEmpty() {

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.*?>
+<GridPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+          minWidth="-Infinity" prefHeight="380.0" prefWidth="800.0" style="-fx-background-color: #252525;"
+          xmlns="http://javafx.com/javafx/11.0.14-internal">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="100.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="50.0" prefHeight="10.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="200.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="50.0" prefHeight="10.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <children>
+        <Label style="-fx-font-size: 30;" text="Collection" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
+            <GridPane.margin>
+                <Insets left="20.0"/>
+            </GridPane.margin>
+        </Label>
+        <TableView fx:id="collectionTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2"
+                   GridPane.rowIndex="1">
+            <columns>
+                <TableColumn prefWidth="100.0" text="Code">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="code"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="availableTableColumn" prefWidth="100.0" text="Available">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="available"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn prefWidth="300.0" text="Title">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="title"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn prefWidth="200.0" text="Author">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="author"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+            </columns>
+            <GridPane.margin>
+                <Insets left="20.0" right="20.0"/>
+            </GridPane.margin>
+        </TableView>
+        <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+            </padding>
+            <children>
+                <Button minWidth="100.0" mnemonicParsing="false" onAction="#onAddButtonClick" text="Add"/>
+                <Button minWidth="100.0" mnemonicParsing="false" onAction="#onEditButtonClick" text="Edit"/>
+                <Button minWidth="100.0" mnemonicParsing="false" onAction="#onDeleteButtonClick" text="Delete"/>
+                <Label fx:id="errorLabel" style="-fx-text-fill: red;"/>
+            </children>
+        </HBox>
+    </children>
+</GridPane>
