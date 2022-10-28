@@ -2,25 +2,24 @@ package com.endassignment.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class Member implements Serializable {
     private int identifier;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private final List<Item> borrowedItems;
+    private final HashMap<Item, LocalDate> borrowedItems;
 
     public Member(int identifier, String firstName, String lastName, LocalDate dateOfBirth) {
         this.identifier = identifier;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
-        borrowedItems = new ArrayList<>();
+        borrowedItems = new HashMap<>();
     }
 
-    public Member(int identifier, String firstName, String lastName, LocalDate dateOfBirth, List<Item> borrowedItems) {
+    public Member(int identifier, String firstName, String lastName, LocalDate dateOfBirth, HashMap<Item, LocalDate> borrowedItems) {
         this.identifier = identifier;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -60,7 +59,7 @@ public class Member implements Serializable {
         this.lastName = lastName;
     }
 
-    public List<Item> getBorrowedItems() {
+    public HashMap<Item, LocalDate> getBorrowedItems() {
         return borrowedItems;
     }
 }

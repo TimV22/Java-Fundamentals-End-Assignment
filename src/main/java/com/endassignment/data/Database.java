@@ -52,6 +52,8 @@ public class Database {
         items.add(new Item(5, "The sun also rises", "Ernest Hemingway", true));
         items.add(new Item(6, "Vile bodies", "Evelyn Waugh", true));
 
+        people.get(4).getBorrowedItems().put(items.get(0), LocalDate.of(2022, 9, 9));
+
         save();
     }
 
@@ -93,7 +95,7 @@ public class Database {
             System.out.println("Loaded data from file");
         } catch (IOException e) {
             try {
-                Files.delete(DATA_FILE.toPath());
+                Files.deleteIfExists(DATA_FILE.toPath());
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }

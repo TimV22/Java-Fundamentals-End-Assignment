@@ -2,7 +2,7 @@ package com.endassignment.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.HashMap;
 
 public class User extends Member implements Serializable {
     private String username;
@@ -14,7 +14,7 @@ public class User extends Member implements Serializable {
         this.password = password;
     }
 
-    public User(int identifier, String username, String firstName, String lastName, String password, LocalDate dateOfBirth, List<Item> borrowedItems) {
+    public User(int identifier, String username, String firstName, String lastName, String password, LocalDate dateOfBirth, HashMap<Item, LocalDate> borrowedItems) {
         super(identifier, firstName, lastName, dateOfBirth, borrowedItems);
         this.username = username;
         this.password = password;

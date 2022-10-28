@@ -13,6 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class LendController extends BaseController implements Initializable {
@@ -38,27 +40,11 @@ public class LendController extends BaseController implements Initializable {
         items = FXCollections.observableList(db.getItems());
     }
 
-    //TODO Lending date
-
     @FXML
     public void onLendButtonClick(ActionEvent actionEvent) {
         actionEvent.consume();
-
         try {
-            lendErrorLabel.setStyle("-fx-text-fill: red");
-            if (memberIdentifierField.getText().isEmpty() || lendItemCodeField.getText().isEmpty()) {
-                lendErrorLabel.setText("Please fill in all fields");
-                return;
-            } else if (people.stream().noneMatch(member -> member.getIdentifier() == (Integer.parseInt(memberIdentifierField.getText())))) {
-                lendErrorLabel.setText("Member not found");
-                return;
-            } else if (items.stream().noneMatch(item -> item.getCode() == (Integer.parseInt(lendItemCodeField.getText())))) {
-                lendErrorLabel.setText("Item not found");
-                return;
-            } else if (!items.stream().filter(item -> item.getCode() == (Integer.parseInt(lendItemCodeField.getText()))).findFirst().get().isAvailable()) {
-                lendErrorLabel.setText("Item is already lent");
-                return;
-            }
+            lendErrorHandling();
         } catch (NumberFormatException e) {
             lendErrorLabel.setText("Please enter a number");
             return;
@@ -67,7 +53,7 @@ public class LendController extends BaseController implements Initializable {
         Member member = people.stream().filter(m -> m.getIdentifier() == (Integer.parseInt(memberIdentifierField.getText()))).findFirst().get();
         Item item = items.stream().filter(i -> i.getCode() == (Integer.parseInt(lendItemCodeField.getText()))).findFirst().get();
         item.setAvailable(false);
-        member.getBorrowedItems().add(item);
+        member.getBorrowedItems().put(item, LocalDate.now());
 
         lendErrorLabel.setStyle("-fx-text-fill: green");
         lendErrorLabel.setText("Item lent");
@@ -75,22 +61,25 @@ public class LendController extends BaseController implements Initializable {
         clearFields();
     }
 
+    private void lendErrorHandling() {
+        lendErrorLabel.setStyle("-fx-text-fill: red");
+
+        if (memberIdentifierField.getText().isEmpty() || lendItemCodeField.getText().isEmpty()) {
+            lendErrorLabel.setText("Please fill in all fields");
+        } else if (people.stream().noneMatch(member -> member.getIdentifier() == (Integer.parseInt(memberIdentifierField.getText())))) {
+            lendErrorLabel.setText("Member not found");
+        } else if (items.stream().noneMatch(item -> item.getCode() == (Integer.parseInt(lendItemCodeField.getText())))) {
+            lendErrorLabel.setText("Item not found");
+        } else if (!items.stream().filter(item -> item.getCode() == (Integer.parseInt(lendItemCodeField.getText()))).findFirst().get().isAvailable()) {
+            lendErrorLabel.setText("Item is already lent");
+        }
+    }
+
     @FXML
     public void onReceiveButtonClick(ActionEvent actionEvent) {
         actionEvent.consume();
         try {
-            receiveErrorLabel.setStyle("-fx-text-fill: red");
-
-            if (receiveItemCodeField.getText().isEmpty()) {
-                receiveErrorLabel.setText("Please fill in the item code");
-                return;
-            } else if (items.stream().noneMatch(item -> item.getCode() == (Integer.parseInt(receiveItemCodeField.getText())))) {
-                receiveErrorLabel.setText("Item not found");
-                return;
-            } else if (items.stream().filter(item -> item.getCode() == (Integer.parseInt(receiveItemCodeField.getText()))).findFirst().get().isAvailable()) {
-                receiveErrorLabel.setText("Item is not lent");
-                return;
-            }
+            receiveErrorHandling();
         } catch (NumberFormatException e) {
             receiveErrorLabel.setText("Please enter a number");
             return;
@@ -98,12 +87,30 @@ public class LendController extends BaseController implements Initializable {
 
         Item item = items.stream().filter(i -> i.getCode() == (Integer.parseInt(receiveItemCodeField.getText()))).findFirst().get();
         item.setAvailable(true);
-        people.stream().filter(member -> member.getBorrowedItems().contains(item)).findFirst().get().getBorrowedItems().remove(item);
-
-        receiveErrorLabel.setStyle("-fx-text-fill: green");
-        receiveErrorLabel.setText("Item returned");
+        HashMap<Item, LocalDate> borrowedItems = people.stream().filter(member -> member.getBorrowedItems().get(item) != null).findFirst().get().getBorrowedItems();
+        LocalDate borrowedDate = borrowedItems.get(item);
+        if (borrowedDate.plusDays(21).isBefore(LocalDate.now())) {
+            int daysLate = (int) (LocalDate.now().toEpochDay() - borrowedDate.plusDays(21).toEpochDay());
+            receiveErrorLabel.setText("Item is " + daysLate + " days overdue");
+            receiveErrorLabel.setStyle("-fx-text-fill: red");
+        } else {
+            receiveErrorLabel.setText("Item received");
+            receiveErrorLabel.setStyle("-fx-text-fill: green");
+        }
 
         clearFields();
+    }
+
+    private void receiveErrorHandling() {
+        receiveErrorLabel.setStyle("-fx-text-fill: red");
+
+        if (receiveItemCodeField.getText().isEmpty()) {
+            receiveErrorLabel.setText("Please fill in the item code");
+        } else if (items.stream().noneMatch(item -> item.getCode() == (Integer.parseInt(receiveItemCodeField.getText())))) {
+            receiveErrorLabel.setText("Item not found");
+        } else if (items.stream().filter(item -> item.getCode() == (Integer.parseInt(receiveItemCodeField.getText()))).findFirst().get().isAvailable()) {
+            receiveErrorLabel.setText("Item is not lent");
+        }
     }
 
     private void clearFields() {
