@@ -24,6 +24,8 @@ public class CollectionController extends BaseController implements Initializabl
     @FXML
     public TableColumn<Item, Boolean> availableTableColumn;
     @FXML
+    public TextField searchField;
+    @FXML
     public TableView<Item> collectionTableView;
     @FXML
     public Label errorLabel;
@@ -46,11 +48,29 @@ public class CollectionController extends BaseController implements Initializabl
                 System.out.println("Selected item: " + selectedItem);
             }
         }));
+
+        //search functionality for collection
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.isEmpty()) {
+                collectionTableView.setItems(items);
+            } else {
+                ObservableList<Item> filteredItems = FXCollections.observableArrayList();
+                items.forEach(item -> {
+                    if (item.getTitle().toLowerCase().contains(newValue.toLowerCase())
+                            || item.getAuthor().toLowerCase().contains(newValue.toLowerCase())) {
+                        filteredItems.add(item);
+                    }
+                });
+                collectionTableView.setItems(filteredItems);
+            }
+        });
     }
 
     private void initTableView() {
         if (availableTableColumn != null) {
 
+            //used https://stackoverflow.com/questions/40090540/javafx-display-text-instead-of-boolean-value-true-false for help
+            //convert the boolean value to a string "yes" or "no"
             availableTableColumn.setCellFactory(column -> new TableCell<Item, Boolean>() {
                 @Override
                 protected void updateItem(Boolean item, boolean empty) {

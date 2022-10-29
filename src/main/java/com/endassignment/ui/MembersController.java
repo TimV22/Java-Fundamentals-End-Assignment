@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,6 +23,8 @@ public class MembersController extends BaseController implements Initializable {
     public TableView<Member> memberTableView;
     @FXML
     public Label errorLabel;
+    @FXML
+    public TextField searchField;
     private Member selectedMember;
 
     public MembersController(User user, Database db, MainController mainController) {
@@ -68,6 +71,23 @@ public class MembersController extends BaseController implements Initializable {
                 System.out.println("Selected item: " + selectedMember);
             }
         }));
+
+        //search functionality for first and last name
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.isEmpty()) {//if search field is empty, show all members
+                memberTableView.setItems(people);
+            } else {
+                ObservableList<Member> filteredList = FXCollections.observableArrayList();
+                //filter the members based on the search field
+                people.forEach(member -> {
+                    if (member.getFirstName().toLowerCase().contains(newValue.toLowerCase())
+                            || member.getLastName().toLowerCase().contains(newValue.toLowerCase())) {
+                        filteredList.add(member);
+                    }
+                });
+                memberTableView.setItems(filteredList);
+            }
+        });
 
 
     }

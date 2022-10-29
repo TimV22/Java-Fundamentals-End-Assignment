@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileDeleteStrategy;
+
 public class Database {
     private static final File DATA_FILE = new File("src/main/resources/com/endassignment/ui/data.dat");
     private final List<Member> people = new ArrayList<>();
@@ -34,6 +36,7 @@ public class Database {
         people.add(new User(1, "Ilene", "Ilene", "Skinner", "Ilene123", LocalDate.of(1958, 4, 13)));
         people.add(new User(2, "Terell", "Terell", "Park", "Terell123", LocalDate.of(1959, 10, 16)));
         people.add(new User(3, "Lavonne", "Lavonne", "Henderson", "Lavonne123", LocalDate.of(1960, 5, 3)));
+        people.add(new User(4, "Steve", "Steve", "Melcorn", "Steve123", LocalDate.of(1963, 6, 2)));
         people.add(new Member(5, "Eustace", "Faulkner", LocalDate.of(1960, 5, 3)));
         people.add(new Member(6, "Malakai", "Haig", LocalDate.of(1971, 1, 27)));
         people.add(new Member(7, "Odetta", "Sempers", LocalDate.of(1979, 3, 23)));
@@ -95,7 +98,7 @@ public class Database {
             System.out.println("Loaded data from file");
         } catch (IOException e) {
             try {
-                Files.deleteIfExists(DATA_FILE.toPath());
+                FileDeleteStrategy.FORCE.delete(DATA_FILE);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
