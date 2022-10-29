@@ -5,11 +5,11 @@ import java.time.LocalDate;
 import java.util.HashMap;
 
 public class Member implements Serializable {
+    private final HashMap<Item, LocalDate> borrowedItems;
     private int identifier;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private final HashMap<Item, LocalDate> borrowedItems;
 
     public Member(int identifier, String firstName, String lastName, LocalDate dateOfBirth) {
         this.identifier = identifier;
