@@ -4,10 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TestMember {
+class TestMember {
 
     @Test
     void testIdentifier() {
@@ -53,7 +54,7 @@ public class TestMember {
         Member member = new Member(1, "FirstName", "LastName", LocalDate.of(2000, 1, 1), items);
         items.put(item, LocalDate.of(2001, 1, 1));
 
-        HashMap<Item, LocalDate> hashMap = member.getBorrowedItems();
+        Map<Item, LocalDate> hashMap = member.getBorrowedItems();
         hashMap.put(item, LocalDate.of(2001, 1, 1));
 
 

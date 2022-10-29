@@ -3,9 +3,10 @@ package com.endassignment.model;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Member implements Serializable {
-    private final HashMap<Item, LocalDate> borrowedItems;
+    private final Map<Item, LocalDate> borrowedItems;
     private int identifier;
     private String firstName;
     private String lastName;
@@ -19,7 +20,7 @@ public class Member implements Serializable {
         borrowedItems = new HashMap<>();
     }
 
-    public Member(int identifier, String firstName, String lastName, LocalDate dateOfBirth, HashMap<Item, LocalDate> borrowedItems) {
+    public Member(int identifier, String firstName, String lastName, LocalDate dateOfBirth, Map<Item, LocalDate> borrowedItems) {
         this.identifier = identifier;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -59,7 +60,7 @@ public class Member implements Serializable {
         this.lastName = lastName;
     }
 
-    public HashMap<Item, LocalDate> getBorrowedItems() {
+    public Map<Item, LocalDate> getBorrowedItems() {
         return borrowedItems;
     }
 }

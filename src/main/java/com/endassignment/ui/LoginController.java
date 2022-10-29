@@ -15,8 +15,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class LoginController extends BaseController {
-    private final Database db = new Database();
-    private final ObservableList<Member> people = FXCollections.observableList(db.getPeople());
+    private final ObservableList<Member> people;
 
     @FXML
     TextField usernameField;
@@ -26,6 +25,10 @@ public class LoginController extends BaseController {
 
     @FXML
     Label errorLabel;
+    public LoginController() {
+        super(null, new Database());
+        people = FXCollections.observableList(db.getPeople());
+    }
 
     @FXML
     public void onLoginButtonClick(ActionEvent event) {

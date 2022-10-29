@@ -1,6 +1,7 @@
 package com.endassignment.ui;
 
 import com.endassignment.data.Database;
+import com.endassignment.exceptions.UnableToUseFxmlException;
 import com.endassignment.model.User;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
@@ -52,7 +53,7 @@ public class BaseController {
         try {
             return new Scene(fxmlLoader.load());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UnableToUseFxmlException(e);
         }
 
     }

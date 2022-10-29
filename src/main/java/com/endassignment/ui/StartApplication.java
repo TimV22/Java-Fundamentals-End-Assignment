@@ -20,6 +20,7 @@ public class StartApplication extends Application {
         fxmlLoader.setController(new LoginController());
         Scene scene = new Scene(fxmlLoader.load());
 
+        //Add JMetro theme
         JMetro jMetro = new JMetro(Style.DARK);
         jMetro.setScene(scene);
 

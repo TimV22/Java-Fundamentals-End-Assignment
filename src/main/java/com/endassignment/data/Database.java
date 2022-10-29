@@ -1,5 +1,8 @@
 package com.endassignment.data;
 
+import com.endassignment.exceptions.SaveDataToFileException;
+import com.endassignment.exceptions.UnableToDeleteFileException;
+import com.endassignment.exceptions.UnknownObjectException;
 import com.endassignment.model.Item;
 import com.endassignment.model.Member;
 import com.endassignment.model.User;
@@ -72,7 +75,7 @@ public class Database {
                 oos.writeObject(object);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new SaveDataToFileException(e);
         }
     }
 
@@ -80,28 +83,36 @@ public class Database {
         //load list from file
         try (ObjectInputStream ois = new ObjectInputStream(
                 new FileInputStream(DATA_FILE))) {
-            while (true) {
-                try {
-                    Object object = ois.readObject();
-                    if (object instanceof Member member) {
-                        people.add(member);
-                    } else if (object instanceof Item item) {
-                        items.add(item);
-                    }
-                } catch (EOFException e) {
-                    break;
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            loadObjects(ois);
             System.out.println("Loaded data from file");
         } catch (IOException e) {
             try {
                 FileDeleteStrategy.FORCE.delete(DATA_FILE);
             } catch (IOException ex) {
-                throw new RuntimeException(ex);
+                throw new UnableToDeleteFileException();
             }
             loadStandardData();
+        } catch (ClassNotFoundException e) {
+            throw new UnknownObjectException();
+        }
+    }
+
+    private void loadObjects(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        while (true) {
+            try {
+                Object object = ois.readObject();
+                if (object instanceof Member member) {
+                    people.add(member);
+                } else if (object instanceof Item item) {
+                    items.add(item);
+                } else {
+                    throw new UnknownObjectException();
+                }
+            } catch (EOFException e) {
+                return;
+            } catch (ClassNotFoundException e) {
+                throw new UnknownObjectException(e);
+            }
         }
     }
 

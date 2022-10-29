@@ -58,7 +58,6 @@ public class MembersController extends BaseController implements Initializable {
             errorLabel.setText("Please select an person to delete");
         }
     }
-    //TODO A search functionality that works on parts of both title and author is not mandatory for a passing grade, but will give points
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
