@@ -30,24 +30,13 @@ public class BaseController {
     }
 
 
-    protected void nextScene(Event event, String fxmlFile, BaseController controller) {
-        Stage stage = getStage(event);
-        event.consume();
 
-        Scene scene = getScene(fxmlFile, controller);
-
-        //set theme
-        JMetro jMetro = new JMetro(Style.DARK);
-        jMetro.setScene(scene);
-
-        showNewScene(stage, scene);
-    }
 
     protected Stage getStage(Event event) {
         return (Stage) ((Node) event.getSource()).getScene().getWindow();
     }
 
-    private Scene getScene(String fxml, BaseController controller) {
+    protected Scene getScene(String fxml, BaseController controller) {
         FXMLLoader fxmlLoader = new FXMLLoader(StartApplication.class.getResource(fxml));
         fxmlLoader.setController(controller);
         try {

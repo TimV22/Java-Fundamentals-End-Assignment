@@ -35,6 +35,15 @@ public class Database {
             e.printStackTrace();
         }
         System.out.println("Created new data file");
+
+        addPeople();
+        addItems();
+        addBorrowedItems();
+
+        save();
+    }
+
+    private void addPeople(){
         people.add(new User(1, "Ilene", "Ilene", "Skinner", "Ilene123", LocalDate.of(1958, 4, 13)));
         people.add(new User(2, "Terell", "Terell", "Park", "Terell123", LocalDate.of(1959, 10, 16)));
         people.add(new User(3, "Lavonne", "Lavonne", "Henderson", "Lavonne123", LocalDate.of(1960, 5, 3)));
@@ -49,17 +58,22 @@ public class Database {
         people.add(new Member(12, "Lulu", "Law", LocalDate.of(1966, 3, 20)));
         people.add(new Member(13, "Ellie", "Leonard", LocalDate.of(1999, 3, 13)));
 
+    }
 
+    private void addItems(){
         items.add(new Item(1, "Absalom, Absalom!", "William Faulkner", true));
         items.add(new Item(2, "A time to kill", "John Grisham", true));
         items.add(new Item(3, "The house of mirth", "Edith Wharton", true));
         items.add(new Item(4, "East of eden", "John SteinBeck", true));
         items.add(new Item(5, "The sun also rises", "Ernest Hemingway", true));
         items.add(new Item(6, "Vile bodies", "Evelyn Waugh", true));
+    }
 
+    private void addBorrowedItems(){
         people.get(4).getBorrowedItems().put(items.get(0), LocalDate.of(2022, 9, 9));
-
-        save();
+        people.get(7).getBorrowedItems().put(items.get(4), LocalDate.of(2021, 12, 29));
+        items.get(0).setAvailable(false);
+        items.get(4).setAvailable(false);
     }
 
 

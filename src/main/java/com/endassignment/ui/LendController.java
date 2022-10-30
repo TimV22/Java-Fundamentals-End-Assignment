@@ -45,7 +45,8 @@ public class LendController extends BaseController implements Initializable {
     public void onLendButtonClick(ActionEvent actionEvent) {
         actionEvent.consume();
         try {
-            lendErrorHandling();
+            if (!allLendFieldCorrect())
+                return;
         } catch (NumberFormatException e) {
             lendErrorLabel.setText("Please enter a number");
             return;
@@ -67,26 +68,32 @@ public class LendController extends BaseController implements Initializable {
         clearFields();
     }
 
-    private void lendErrorHandling() {
+    private boolean allLendFieldCorrect() {
         lendErrorLabel.setStyle(ERROR_LABEL_STYLE);
 
         if (memberIdentifierField.getText().isEmpty() || lendItemCodeField.getText().isEmpty()) {
             lendErrorLabel.setText("Please fill in all fields");
+            return false;
         } else if (people.stream().noneMatch(member -> member.getIdentifier() == (Integer.parseInt(memberIdentifierField.getText())))) {
             lendErrorLabel.setText("Member not found");
+            return false;
         } else if (items.stream().noneMatch(item -> item.getCode() == (Integer.parseInt(lendItemCodeField.getText())))) {
             lendErrorLabel.setText("Item not found");
+            return false;
         } else if (!items.stream().filter(item ->
                 item.getCode() == (Integer.parseInt(lendItemCodeField.getText()))).findFirst().get().isAvailable()) {
             lendErrorLabel.setText("Item is already lent");
+            return false;
         }
+        return true;
     }
 
     @FXML
     public void onReceiveButtonClick(ActionEvent actionEvent) {
         actionEvent.consume();
         try {
-            receiveErrorHandling();
+            if (!allReceiveFieldCorrect())
+                return;
         } catch (NumberFormatException e) {
             receiveErrorLabel.setText("Please enter a number");
             return;
@@ -110,17 +117,21 @@ public class LendController extends BaseController implements Initializable {
         clearFields();
     }
 
-    private void receiveErrorHandling() {
+    private boolean allReceiveFieldCorrect() {
         receiveErrorLabel.setStyle(ERROR_LABEL_STYLE);
 
         if (receiveItemCodeField.getText().isEmpty()) {
             receiveErrorLabel.setText("Please fill in the item code");
+            return false;
         } else if (items.stream().noneMatch(item -> item.getCode() == (Integer.parseInt(receiveItemCodeField.getText())))) {
             receiveErrorLabel.setText("Item not found");
+            return false;
         } else if (items.stream().filter(item ->
                 item.getCode() == (Integer.parseInt(receiveItemCodeField.getText()))).findFirst().get().isAvailable()) {
             receiveErrorLabel.setText("Item is not lent");
+            return false;
         }
+        return true;
     }
 
     private void clearFields() {

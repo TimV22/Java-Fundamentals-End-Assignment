@@ -86,8 +86,6 @@ public class MainController extends BaseController implements Initializable {
         } catch (IOException e) {
             throw new UnableToUseFxmlException(e);
         }
-
-
     }
 
 
