@@ -1,2 +1,8 @@
-# Java-Fundamentals-End-Assignment
-## Gemaakt door TimV22
+# Java Fundamentals End Assignment 2022
+
+
+>
+> ##### Username and Passwords
+> - Terell - Terell123
+>
+
