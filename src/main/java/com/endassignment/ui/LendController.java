@@ -63,7 +63,7 @@ public class LendController extends BaseController implements Initializable {
         member.getBorrowedItems().put(item, LocalDate.now());
 
         lendErrorLabel.setStyle("-fx-text-fill: green");
-        lendErrorLabel.setText("Item lent");
+        lendErrorLabel.setText("Item lent to " + member.getFirstName());
 
         clearFields();
     }
@@ -102,9 +102,12 @@ public class LendController extends BaseController implements Initializable {
         Item item = items.stream().filter(i ->
                 i.getCode() == (Integer.parseInt(receiveItemCodeField.getText()))).findFirst().get();
         item.setAvailable(true);
+
         Map<Item, LocalDate> borrowedItems = people.stream().filter(member ->
                 member.getBorrowedItems().get(item) != null).findFirst().get().getBorrowedItems();
+
         LocalDate borrowedDate = borrowedItems.get(item);
+        borrowedItems.remove(item);
         if (borrowedDate.plusDays(21).isBefore(LocalDate.now())) {
             int daysLate = (int) (LocalDate.now().toEpochDay() - borrowedDate.plusDays(21).toEpochDay());
             receiveErrorLabel.setText("Item is " + daysLate + " days overdue");

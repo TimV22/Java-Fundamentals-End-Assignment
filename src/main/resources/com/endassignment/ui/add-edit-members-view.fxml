@@ -48,7 +48,7 @@
                     </GridPane.margin>
                 </TextField>
                 <DatePicker fx:id="birthDatePicker" maxWidth="300.0" minWidth="300.0"
-                            promptText="Birth date (dd/mm/yyyy)" GridPane.columnIndex="1"/>
+                            promptText="Birth date (dd-mm-yyyy)" GridPane.columnIndex="1"/>
             </children>
         </GridPane>
         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="2"

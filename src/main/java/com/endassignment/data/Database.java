@@ -1,7 +1,6 @@
 package com.endassignment.data;
 
 import com.endassignment.exceptions.SaveDataToFileException;
-import com.endassignment.exceptions.UnableToDeleteFileException;
 import com.endassignment.exceptions.UnknownObjectException;
 import com.endassignment.model.Item;
 import com.endassignment.model.Member;
@@ -9,6 +8,7 @@ import com.endassignment.model.User;
 import org.apache.commons.io.FileDeleteStrategy;
 
 import java.io.*;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -31,6 +31,8 @@ public class Database {
     private void loadStandardData() {
         try {
             Files.createFile(DATA_FILE.toPath());
+        } catch (FileAlreadyExistsException ignored) {
+            System.out.println("File could not be deleted, overwriting data");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -80,7 +82,7 @@ public class Database {
     public void save() {
         System.out.println("Saving data to file");
         //save list to file
-        try (FileOutputStream fos = new FileOutputStream(DATA_FILE);
+        try (FileOutputStream fos = new FileOutputStream(DATA_FILE, false);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             for (Object object : people) {
                 oos.writeObject(object);
@@ -102,10 +104,11 @@ public class Database {
         } catch (IOException e) {
             try {
                 FileDeleteStrategy.FORCE.delete(DATA_FILE);
-            } catch (IOException ex) {
-                throw new UnableToDeleteFileException();
+            } catch (IOException ignored) {
+            } //ignore and overwrite current file
+            finally {
+                loadStandardData();
             }
-            loadStandardData();
         } catch (ClassNotFoundException e) {
             throw new UnknownObjectException();
         }

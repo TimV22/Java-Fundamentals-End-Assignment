@@ -12,8 +12,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.util.converter.LocalDateStringConverter;
 
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class AddEditMembersController extends BaseController implements Initializable {
@@ -101,6 +103,15 @@ public class AddEditMembersController extends BaseController implements Initiali
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //made by using https://examples.javacodegeeks.com/desktop-java/javafx/datepicker-javafx/javafx-datepicker-example/#:~:text=By%20default%2C%20it%20formats%20dates,MM%2Fdd%2Fyyyy%20format.
+
+        // Make Date Time Converter
+        String pattern = "dd-MM-yyyy";
+        DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern(pattern);
+
+        // Set the Date Time Converter
+        birthDatePicker.setConverter(new LocalDateStringConverter(dtFormatter, null));
+
         //if Edit member fill in the fields
         if (selectedMember != null) {
             firstNameField.setText(selectedMember.getFirstName());
@@ -110,4 +121,5 @@ public class AddEditMembersController extends BaseController implements Initiali
             memberLabel.setText("Edit Member");
         }
     }
+
 }
