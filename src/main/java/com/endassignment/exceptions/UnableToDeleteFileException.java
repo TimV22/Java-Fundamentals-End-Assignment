@@ -5,6 +5,7 @@ public class UnableToDeleteFileException extends RuntimeException {
     public UnableToDeleteFileException() {
         super("Unable to delete file");
     }
+
     public UnableToDeleteFileException(String message) {
         super(message);
     }

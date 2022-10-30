@@ -91,7 +91,7 @@ public class LendController extends BaseController implements Initializable {
     @FXML
     public void onReceiveButtonClick(ActionEvent actionEvent) {
         actionEvent.consume();
-        try {
+        try { //check if fields are correct
             if (!allReceiveFieldCorrect())
                 return;
         } catch (NumberFormatException e) {
@@ -99,6 +99,7 @@ public class LendController extends BaseController implements Initializable {
             return;
         }
 
+        //get member and item
         Item item = items.stream().filter(i ->
                 i.getCode() == (Integer.parseInt(receiveItemCodeField.getText()))).findFirst().get();
         item.setAvailable(true);
@@ -106,8 +107,11 @@ public class LendController extends BaseController implements Initializable {
         Map<Item, LocalDate> borrowedItems = people.stream().filter(member ->
                 member.getBorrowedItems().get(item) != null).findFirst().get().getBorrowedItems();
 
+        //set item to available and remove from borrowedItems
         LocalDate borrowedDate = borrowedItems.get(item);
         borrowedItems.remove(item);
+
+        //check if item is 3 weeks late
         if (borrowedDate.plusDays(21).isBefore(LocalDate.now())) {
             int daysLate = (int) (LocalDate.now().toEpochDay() - borrowedDate.plusDays(21).toEpochDay());
             receiveErrorLabel.setText("Item is " + daysLate + " days overdue");

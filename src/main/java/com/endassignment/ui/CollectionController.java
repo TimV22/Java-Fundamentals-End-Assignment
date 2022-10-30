@@ -90,11 +90,13 @@ public class CollectionController extends BaseController implements Initializabl
 
     @FXML
     public void onAddButtonClick(ActionEvent actionEvent) {
+        //load add item view
         mainController.loadNextScene("add-edit-items-view.fxml", new AddEditItemsController(user, db, mainController));
     }
 
     @FXML
     public void onEditButtonClick(ActionEvent actionEvent) {
+        //load edit item view or give an error when no item is selected
         if (selectedItem != null) {
             mainController.loadNextScene("add-edit-items-view.fxml", new AddEditItemsController(user, db, selectedItem, mainController));
         } else {
@@ -104,6 +106,7 @@ public class CollectionController extends BaseController implements Initializabl
 
     @FXML
     public void onDeleteButtonClick(ActionEvent actionEvent) {
+        //delete item or give an error when no item is selected
         actionEvent.consume();
         if (selectedItem != null) {
             items.remove(selectedItem);

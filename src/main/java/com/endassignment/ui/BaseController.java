@@ -3,13 +3,9 @@ package com.endassignment.ui;
 import com.endassignment.data.Database;
 import com.endassignment.exceptions.UnableToUseFxmlException;
 import com.endassignment.model.User;
-import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import jfxtras.styles.jmetro.JMetro;
-import jfxtras.styles.jmetro.Style;
 
 import java.io.IOException;
 
@@ -29,12 +25,6 @@ public class BaseController {
         this.db = db;
     }
 
-
-
-
-    protected Stage getStage(Event event) {
-        return (Stage) ((Node) event.getSource()).getScene().getWindow();
-    }
 
     protected Scene getScene(String fxml, BaseController controller) {
         FXMLLoader fxmlLoader = new FXMLLoader(StartApplication.class.getResource(fxml));

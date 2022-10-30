@@ -81,7 +81,7 @@ public class AddEditItemsController extends BaseController implements Initializa
 
     private boolean checkIfEmpty() {
         boolean isEmpty = checkTextFieldEmpty(authorField);
-        if (checkTextFieldEmpty(titleField)) {
+        if (checkTextFieldEmpty(titleField) && !isEmpty) {
             isEmpty = true;
         }
         return isEmpty;

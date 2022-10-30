@@ -5,6 +5,7 @@ public class UnknownObjectException extends RuntimeException {
     public UnknownObjectException() {
         super("Unknown object type");
     }
+
     public UnknownObjectException(String message) {
         super(message);
     }

@@ -91,6 +91,7 @@ public class MainController extends BaseController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //load first scene
         loadNextScene("lend-view.fxml", new LendController(user, db));
         colorButtons(lendReceiveButton);
     }

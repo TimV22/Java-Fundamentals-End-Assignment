@@ -14,7 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
@@ -30,6 +29,7 @@ public class LoginController extends BaseController {
 
     @FXML
     Label errorLabel;
+
     public LoginController() {
         super(null, new Database());
         people = FXCollections.observableList(db.getPeople());
@@ -49,10 +49,6 @@ public class LoginController extends BaseController {
                 return;
             }
         }
-        System.out.println("Login failed");
-        System.out.println("Username: " + usernameField.getText());
-        System.out.println("Password: " + passwordField.getText());
-
         //show error message
         errorLabel.setText("Invalid username or password");
     }
@@ -77,6 +73,8 @@ public class LoginController extends BaseController {
 
         //adding event to save the database when program is closed
         showNewScene(stage, scene);
+
+        //adding event to save the database when program is closed
         stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
     }
 

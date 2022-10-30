@@ -35,11 +35,13 @@ public class MembersController extends BaseController implements Initializable {
 
     @FXML
     public void onAddButtonClick(ActionEvent actionEvent) {
+        //load add member view
         mainController.loadNextScene("add-edit-members-view.fxml", new AddEditMembersController(user, db, mainController));
     }
 
     @FXML
     public void onEditButtonClick(ActionEvent actionEvent) {
+        //load edit member view or give an error when no item is selected
         if (selectedMember != null) {
             mainController.loadNextScene("add-edit-members-view.fxml", new AddEditMembersController(user, db, selectedMember, mainController));
         } else {
@@ -49,6 +51,7 @@ public class MembersController extends BaseController implements Initializable {
 
     @FXML
     public void onDeleteButtonClick(ActionEvent actionEvent) {
+        //delete selected member or give an error when no item is selected
         actionEvent.consume();
         if (selectedMember != null) {
             people.remove(selectedMember);
@@ -87,7 +90,5 @@ public class MembersController extends BaseController implements Initializable {
                 memberTableView.setItems(filteredList);
             }
         });
-
-
     }
 }

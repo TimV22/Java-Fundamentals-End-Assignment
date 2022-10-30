@@ -20,6 +20,7 @@ public class Database {
     private final List<Item> items = new ArrayList<>();
 
     public Database() {
+        //check for data file
         if (!DATA_FILE.exists()) {
             loadStandardData();
             System.out.println("Loaded standard data");
@@ -29,6 +30,7 @@ public class Database {
     }
 
     private void loadStandardData() {
+        //create standard data
         try {
             Files.createFile(DATA_FILE.toPath());
         } catch (FileAlreadyExistsException ignored) {
@@ -38,6 +40,7 @@ public class Database {
         }
         System.out.println("Created new data file");
 
+        //add Data
         addPeople();
         addItems();
         addBorrowedItems();
@@ -45,7 +48,7 @@ public class Database {
         save();
     }
 
-    private void addPeople(){
+    private void addPeople() {
         people.add(new User(1, "Ilene", "Ilene", "Skinner", "Ilene123", LocalDate.of(1958, 4, 13)));
         people.add(new User(2, "Terell", "Terell", "Park", "Terell123", LocalDate.of(1959, 10, 16)));
         people.add(new User(3, "Lavonne", "Lavonne", "Henderson", "Lavonne123", LocalDate.of(1960, 5, 3)));
@@ -62,7 +65,7 @@ public class Database {
 
     }
 
-    private void addItems(){
+    private void addItems() {
         items.add(new Item(1, "Absalom, Absalom!", "William Faulkner", true));
         items.add(new Item(2, "A time to kill", "John Grisham", true));
         items.add(new Item(3, "The house of mirth", "Edith Wharton", true));
@@ -71,7 +74,7 @@ public class Database {
         items.add(new Item(6, "Vile bodies", "Evelyn Waugh", true));
     }
 
-    private void addBorrowedItems(){
+    private void addBorrowedItems() {
         people.get(4).getBorrowedItems().put(items.get(0), LocalDate.of(2022, 9, 9));
         people.get(7).getBorrowedItems().put(items.get(4), LocalDate.of(2021, 12, 29));
         items.get(0).setAvailable(false);
@@ -118,7 +121,7 @@ public class Database {
         while (true) {
             try {
                 Object object = ois.readObject();
-                if (object instanceof Member member) {
+                if (object instanceof Member member) {//check for objects found in file
                     people.add(member);
                 } else if (object instanceof Item item) {
                     items.add(item);
