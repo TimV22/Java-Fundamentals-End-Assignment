@@ -2,7 +2,7 @@
 
 
 >
-> ##### Username and Passwords
+> ##### Usernames and Passwords
 > - Ilene - Ilene123
 > - Terell - Terell123
 > - Lavonne - Lavonne123
