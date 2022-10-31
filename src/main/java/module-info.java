@@ -2,7 +2,6 @@ module com.tim.endassignment {
     requires org.jfxtras.styles.jmetro;
     requires javafx.controls;
     requires javafx.fxml;
-    requires org.apache.commons.io;
 
 
     opens com.endassignment.ui to javafx.fxml;

@@ -5,7 +5,6 @@ import com.endassignment.exceptions.UnknownObjectException;
 import com.endassignment.model.Item;
 import com.endassignment.model.Member;
 import com.endassignment.model.User;
-import org.apache.commons.io.FileDeleteStrategy;
 
 import java.io.*;
 import java.nio.file.FileAlreadyExistsException;
@@ -106,10 +105,9 @@ public class Database {
             System.out.println("Loaded data from file");
         } catch (IOException e) {
             try {
-                FileDeleteStrategy.FORCE.delete(DATA_FILE);
-            } catch (IOException ignored) {
-            } //ignore and overwrite current file
-            finally {
+                Files.delete(DATA_FILE.toPath());
+            } catch (IOException Ignored) {// ignore unable to delete
+            } finally {
                 loadStandardData();
             }
         } catch (ClassNotFoundException e) {
